@@ -49,6 +49,12 @@ public abstract class Enemy extends Entity implements Battleable {
 
     public abstract void move(Game game);
 
+    /**
+     * Moves an Enemy when the player is affected by Invincibility potion
+     * @param map
+     * @param currentPosition
+     * @return
+     */
     protected Position moveWhenInvincible(GameMap map, Position currentPosition) {
         Position plrDiff = Position.calculatePositionBetween(map.getPlayer().getPosition(), currentPosition);
 
