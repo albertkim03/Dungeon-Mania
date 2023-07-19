@@ -28,15 +28,15 @@ public class Key extends Entity implements InventoryItem {
         }
     }
 
-    @Override
-    public void onMovedAway(GameMap map, Entity entity) {
-        return;
-    }
+    // @Override
+    // public void onMovedAway(GameMap map, Entity entity) {
+    // return;
+    // }
 
-    @Override
-    public void onDestroy(GameMap gameMap) {
-        return;
-    }
+    // @Override
+    // public void onDestroy(GameMap gameMap) {
+    // return;
+    // }
 
     public int getnumber() {
         return number;
