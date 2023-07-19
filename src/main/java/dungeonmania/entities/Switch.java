@@ -54,8 +54,8 @@ public class Switch extends Entity {
         return activated;
     }
 
-    @Override
-    public void onDestroy(GameMap gameMap) {
-        return;
-    }
+    // @Override
+    // public void onDestroy(GameMap gameMap) {
+    // return;
+    // }
 }

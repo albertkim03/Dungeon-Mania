@@ -42,15 +42,16 @@ public abstract class Enemy extends Entity implements Battleable {
         g.unsubscribe(getId());
     }
 
-    @Override
-    public void onMovedAway(GameMap map, Entity entity) {
-        return;
-    }
+    // @Override
+    // public void onMovedAway(GameMap map, Entity entity) {
+    // return;
+    // }
 
     public abstract void move(Game game);
 
     /**
      * Moves an Enemy when the player is affected by Invincibility potion
+     *
      * @param map
      * @param currentPosition
      * @return
