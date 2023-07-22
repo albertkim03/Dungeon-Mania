@@ -172,8 +172,8 @@ public class Game {
         return goals;
     }
 
-    public void setGoals(Goal goals) {
-        this.goals = goals;
+    public void setGoals(Goal goal) {
+        this.goals = goal;
     }
 
     public GameMap getMap() {
