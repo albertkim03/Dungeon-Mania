@@ -13,14 +13,14 @@ import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.goals.GoalOld;
+import dungeonmania.goals.Goal;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Direction;
 
 public class Game {
     private String id;
     private String name;
-    private GoalOld goals;
+    private Goal goals;
     private GameMap map;
     private Player player;
     private BattleFacade battleFacade;
@@ -168,12 +168,12 @@ public class Game {
         return name;
     }
 
-    public GoalOld getGoals() {
+    public Goal getGoals() {
         return goals;
     }
 
-    public void setGoals(GoalOld goals) {
-        this.goals = goals;
+    public void setGoals(Goal goal) {
+        this.goals = goal;
     }
 
     public GameMap getMap() {
