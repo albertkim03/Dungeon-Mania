@@ -1,16 +1,16 @@
 package dungeonmania.goals;
 
-import java.util.List;
+// import java.util.List;
 
 import dungeonmania.Game;
-import dungeonmania.entities.Entity;
-import dungeonmania.entities.Exit;
-import dungeonmania.entities.Player;
-import dungeonmania.entities.Switch;
-import dungeonmania.util.Position;
+// import dungeonmania.entities.Entity;
+// import dungeonmania.entities.Exit;
+// import dungeonmania.entities.Player;
+// import dungeonmania.entities.Switch;
+// import dungeonmania.util.Position;
 
 public class TreasureGoal implements Goal {
-    int target;
+    private int target;
 
     public TreasureGoal(int target) {
         this.target = target;
@@ -25,5 +25,9 @@ public class TreasureGoal implements Goal {
             return "";
         else
             return ":treasure";
+    }
+
+    public int getTarget() {
+        return target;
     }
 }

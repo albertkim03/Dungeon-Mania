@@ -6,7 +6,7 @@ import dungeonmania.Game;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Exit;
 import dungeonmania.entities.Player;
-import dungeonmania.entities.Switch;
+// import dungeonmania.entities.Switch;
 import dungeonmania.util.Position;
 
 public class ExitGoal implements Goal {
