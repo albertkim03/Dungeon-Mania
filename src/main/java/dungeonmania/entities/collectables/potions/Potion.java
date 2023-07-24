@@ -7,6 +7,7 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.collectables.Collectables;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
+import dungeonmania.entities.Player;
 
 public abstract class Potion extends Collectables implements BattleItem {
     private int duration;
