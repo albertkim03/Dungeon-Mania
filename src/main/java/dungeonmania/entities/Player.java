@@ -35,11 +35,7 @@ public class Player extends Entity implements Battleable {
 
     public Player(Position position, double health, double attack) {
         super(position);
-        battleStatistics = new BattleStatistics(
-                health,
-                attack,
-                0,
-                BattleStatistics.DEFAULT_DAMAGE_MAGNIFIER,
+        battleStatistics = new BattleStatistics(health, attack, 0, BattleStatistics.DEFAULT_DAMAGE_MAGNIFIER,
                 BattleStatistics.DEFAULT_PLAYER_DAMAGE_REDUCER);
         inventory = new Inventory();
         state = new BaseState(this);
@@ -166,23 +162,9 @@ public class Player extends Entity implements Battleable {
 
     public BattleStatistics applyBuff(BattleStatistics origin) {
         if (state.isInvincible()) {
-            return BattleStatistics.applyBuff(origin, new BattleStatistics(
-                    0,
-                    0,
-                    0,
-                    1,
-                    1,
-                    true,
-                    true));
+            return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));
         } else if (state.isInvisible()) {
-            return BattleStatistics.applyBuff(origin, new BattleStatistics(
-                    0,
-                    0,
-                    0,
-                    1,
-                    1,
-                    false,
-                    false));
+            return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, false, false));
         }
         return origin;
     }
