@@ -4,10 +4,10 @@ import dungeonmania.entities.Entity;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
-public class Key extends Collectables {
+public class SunStone extends Collectables {
     private int number;
 
-    public Key(Position position, int number) {
+    public SunStone(Position position, int number) {
         super(position);
         this.number = number;
     }
@@ -20,5 +20,4 @@ public class Key extends Collectables {
     public int getnumber() {
         return number;
     }
-
 }

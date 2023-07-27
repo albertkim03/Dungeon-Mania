@@ -13,14 +13,4 @@ public class Treasure extends Collectables {
     public boolean canMoveOnto(GameMap map, Entity entity) {
         return true;
     }
-
-    // @Override
-    // public void onMovedAway(GameMap map, Entity entity) {
-    // return;
-    // }
-
-    // @Override
-    // public void onDestroy(GameMap gameMap) {
-    // return;
-    // }
 }

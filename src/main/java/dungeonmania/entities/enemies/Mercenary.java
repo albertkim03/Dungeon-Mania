@@ -28,6 +28,8 @@ public class Mercenary extends Enemy implements Interactable {
     private double allyDefence;
     private boolean allied = false;
     private boolean isAdjacentToPlayer = false;
+    private boolean isMindControlled = false;
+    private int mindControlledDuration = 0;
 
     public Mercenary(Position position, double health, double attack, int bribeAmount, int bribeRadius,
             double allyAttack, double allyDefence) {
@@ -51,6 +53,7 @@ public class Mercenary extends Enemy implements Interactable {
 
     /**
      * check whether the current merc can be bribed
+     * 
      * @param player
      * @return
      */
@@ -81,6 +84,11 @@ public class Mercenary extends Enemy implements Interactable {
         Position nextPos;
         GameMap map = game.getMap();
         Player player = game.getPlayer();
+
+        if (player.hasSceptre()) {
+            allied = true;
+        }
+
         if (allied) {
             nextPos = isAdjacentToPlayer ? player.getPreviousDistinctPosition()
                     : map.dijkstraPathFind(getPosition(), player.getPosition(), this);
@@ -109,6 +117,10 @@ public class Mercenary extends Enemy implements Interactable {
 
     @Override
     public boolean isInteractable(Player player) {
+        if (player.hasSceptre()) {
+            allied = true;
+        }
+
         return !allied && canBeBribed(player);
     }
 
@@ -117,5 +129,31 @@ public class Mercenary extends Enemy implements Interactable {
         if (!allied)
             return super.getBattleStatistics();
         return new BattleStatistics(0, allyAttack, allyDefence, 1, 1);
+    }
+
+    public void setMindControlled(boolean isMindControlled, int duration) {
+        this.isMindControlled = isMindControlled;
+        this.mindControlledDuration = duration;
+    }
+
+    public void mindControlTick() {
+        this.mindControlledDuration--;
+
+        // duration is complete
+        if (this.mindControlledDuration <= 0) {
+            // set to 0 incase it goes to negative
+            this.mindControlledDuration = 0;
+            this.isMindControlled = false;
+        }
+
+        return;
+    }
+
+    public void ifMindControlled() {
+        // stub function for when mindControlled is true
+
+        if (isMindControlled) {
+            return;
+        }
     }
 }
