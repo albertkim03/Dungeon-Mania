@@ -19,12 +19,12 @@ class MenuScene extends Scene {
   private newGame: TextButton;
   private exitGame: TextButton;
   private credits: TextButton;
-
+  private dungeonGeneration: TextButton;
   constructor() {
     super("scene-menu");
   }
 
-  init() {}
+  init() { }
 
   preload() {
     // load required assets...
@@ -56,7 +56,7 @@ class MenuScene extends Scene {
 
   create() {
     generateSceneWideSymbols(this);
-    
+
     playBackgroundMusic(
       "main-menu-",
       this,
@@ -147,7 +147,7 @@ class MenuScene extends Scene {
     this.newGame = new TextButton(
       this,
       10,
-      this.renderer.height / 4 + 75,
+      this.renderer.height / 4 + 45,
       window.Config.localisation.main_menu.buttons.new_game,
       {
         fontSize: "25px",
@@ -228,14 +228,98 @@ class MenuScene extends Scene {
     this.add.existing(this.newGame);
     this.newGame.setX(-this.newGame.width);
 
+    this.dungeonGeneration = new TextButton(
+      this,
+      10,
+      this.renderer.height / 4 + 85,
+      "Start Dungeon Generations",
+      {
+        fontSize: "25px",
+        fontFamily: "main_menu-font",
+      },
+      async () => {
+        const dungeons = await API.getDungeons();
+        const configs = await API.getConfigs();
+        let dungeon: Dungeon;
+
+        const result = await Swal.fire({
+          title: "Generate New Game",
+          heightAuto: false,
+          html: `
+          <label for="xStart" class="f6 b db mb2 mt3">xStart</label>
+          <input id="xStart" type="number" class="swal2-input" required="">
+    
+          <label for="yStart" class="f6 b db mb2 mt3">yStart</label>
+          <input id="yStart" type="number" class="swal2-input" required="">
+    
+          <label for="xEnd" class="f6 b db mb2 mt3">xEnd</label>
+          <input id="xEnd" type="number" class="swal2-input" required="">
+    
+          <label for="yEnd" class="f6 b db mb2 mt3">yEnd</label>
+          <input id="yEnd" type="number" class="swal2-input" required="">
+          <label for="config" class="f6 b db mb2 mt3"
+              >Configuration<span class="normal black-60"></span></label
+          >
+          <select
+              id="config"
+              class="swal2-input"
+              list="configs"
+              required=""
+              >
+              <datalist id="configs">
+              ${configs.map((x) => `<option>${x}</option>`).join("\n")}
+              </datalist>
+          </select>
+          `,
+          focusConfirm: false,
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          allowOutsideClick: () => !Swal.isLoading(),
+          preConfirm: async () => {
+            let inputValidator = async (values) => {
+              for (let value of values) {
+                if (!value) {
+                  Swal.showValidationMessage("All fields need to be filled out");
+                  return false;
+                }
+              }
+              return values;
+            };
+            let results = [
+              (document.getElementById("xStart") as HTMLInputElement).value,
+              (document.getElementById("yStart") as HTMLInputElement).value,
+              (document.getElementById("xEnd") as HTMLInputElement).value,
+              (document.getElementById("yEnd") as HTMLInputElement).value,
+              (document.getElementById("config") as HTMLInputElement).value,
+            ];
+            if (await inputValidator(results)) {
+              dungeon = await API.generateDungeon(+results[0], +results[1], +results[2], +results[3], results[4]);
+              return !!dungeon;
+            }
+          },
+        });
+
+        if (result.isConfirmed) {
+          // For debugging we won't do the *smart* thing here which is just
+          // to invoke a load event on the game scene. Instead we'll store the dungeon
+          // in our window frame and then load the next scene to read from it.
+          window.Dungeon = dungeon;
+          this.scene.start("scene-game");
+        }
+      }
+    );
+    this.add.existing(this.dungeonGeneration);
+    this.dungeonGeneration.setX(-this.dungeonGeneration.width);
+
+    ////////////////////////////////////////// Credits and exit below /////////////
     this.credits = new TextButton(
       this,
       10,
       this.renderer.height / 4 +
-        this.newGame.height +
-        10 +
-        20 +
-        75,
+      this.newGame.height +
+      10 +
+      20 +
+      75,
       window.Config.localisation.main_menu.buttons.credits,
       {
         fontSize: "25px",
@@ -255,11 +339,11 @@ class MenuScene extends Scene {
       this,
       10,
       this.renderer.height / 4 +
-        this.newGame.height +
-        this.credits.height +
-        30 +
-        20 +
-        75,
+      this.newGame.height +
+      this.credits.height +
+      30 +
+      20 +
+      75,
       window.Config.localisation.main_menu.buttons.quit_game,
       {
         fontSize: "25px",
@@ -279,7 +363,7 @@ class MenuScene extends Scene {
     this.tweens.add({
       delay: 3500,
       duration: 1000,
-      targets: [this.newGame, this.credits, this.exitGame],
+      targets: [this.newGame, this.dungeonGeneration, this.credits, this.exitGame],
       x: 10,
       ease: "Bounce",
     });
@@ -289,7 +373,7 @@ class MenuScene extends Scene {
     });
   }
 
-  update(time: number, delta: number) {}
+  update(time: number, delta: number) { }
 }
 
 export default MenuScene;
