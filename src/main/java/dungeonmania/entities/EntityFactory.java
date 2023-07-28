@@ -1,6 +1,9 @@
 package dungeonmania.entities;
 
 import dungeonmania.Game;
+import dungeonmania.entities.Logic.LightBulb;
+import dungeonmania.entities.Logic.SwitchDoor;
+import dungeonmania.entities.Logic.Wire;
 import dungeonmania.entities.buildables.Bow;
 import dungeonmania.entities.buildables.Shield;
 import dungeonmania.entities.collectables.*;
@@ -150,7 +153,10 @@ public class EntityFactory {
             return new Arrow(pos);
         case "bomb":
             int bombRadius = config.optInt("bomb_radius", Bomb.DEFAULT_RADIUS);
-            return new Bomb(pos, bombRadius);
+            if (!config.has("logical_rule")) {
+                return new Bomb(pos, bombRadius, "or");
+            }
+            return new Bomb(pos, bombRadius, config.getString("logical_rule"));
         case "invisibility_potion":
             int invisibilityPotionDuration = config.optInt("invisibility_potion_duration",
                     InvisibilityPotion.DEFAULT_DURATION);
@@ -171,6 +177,12 @@ public class EntityFactory {
             return new Door(pos, jsonEntity.getInt("key"));
         case "key":
             return new Key(pos, jsonEntity.getInt("key"));
+        case "light_bulb_off":
+            return new LightBulb(pos, config.getString("logical_rule"));
+        case "wire":
+            return new Wire(pos);
+        case "switch_door":
+            return new SwitchDoor(pos, config.getString("logical_rule"));
         default:
             return null;
         }
