@@ -8,10 +8,12 @@ import java.util.stream.Collectors;
 
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
-import dungeonmania.entities.Switch;
+import dungeonmania.entities.Logic.Conductor;
+import dungeonmania.entities.Logic.Logic;
+import dungeonmania.entities.Logic.LogicRuleEntity;
 import dungeonmania.map.GameMap;
 
-public class Bomb extends Collectables {
+public class Bomb extends LogicRuleEntity {
     public enum State {
         SPAWNED, INVENTORY, PLACED
     }
@@ -20,25 +22,20 @@ public class Bomb extends Collectables {
     private State state;
     private int radius;
 
-    private List<Switch> subs = new ArrayList<>();
+    private List<Conductor> logics = new ArrayList<>();
 
-    public Bomb(Position position, int radius) {
-        super(position);
+    public Bomb(Position position, int radius, String logicalRule) {
+        super(position.asLayer(Entity.ITEM_LAYER), logicalRule);
         state = State.SPAWNED;
         this.radius = radius;
     }
 
-    public void subscribe(Switch s) {
-        this.subs.add(s);
+    public void subscribe(Conductor s) {
+        this.logics.add(s);
     }
 
     public void notify(GameMap map) {
         explode(map);
-    }
-
-    @Override
-    public boolean canMoveOnto(GameMap map, Entity entity) {
-        return true;
     }
 
     @Override
@@ -48,7 +45,8 @@ public class Bomb extends Collectables {
         if (entity instanceof Player) {
             if (!((Player) entity).pickUp(this))
                 return;
-            subs.stream().forEach(s -> s.unsubscribe(this));
+            logics.stream().forEach(l -> l.unsubscribe(this));
+            logics.stream().forEach(l -> l.logicUnsubscribe(this));
             map.destroyEntity(this);
         }
         this.state = State.INVENTORY;
@@ -70,10 +68,12 @@ public class Bomb extends Collectables {
         this.state = State.PLACED;
         List<Position> adjPosList = getPosition().getCardinallyAdjacentPositions();
         adjPosList.stream().forEach(node -> {
-            List<Entity> entities = map.getEntities(node).stream().filter(e -> (e instanceof Switch))
+            List<Entity> entities = map.getEntities(node).stream().filter(e -> (e instanceof Conductor))
                     .collect(Collectors.toList());
-            entities.stream().map(Switch.class::cast).forEach(s -> s.subscribe(this, map));
-            entities.stream().map(Switch.class::cast).forEach(s -> this.subscribe(s));
+            entities.stream().map(Conductor.class::cast).forEach(s -> s.subscribe(this, map));
+            entities.stream().map(Logic.class::cast).forEach(s -> s.logicSubscribe(this));
+            entities.stream().map(Conductor.class::cast).forEach(s -> this.subscribe(s));
+            entities.stream().map(Logic.class::cast).forEach(s -> s.logicSubscribe(s));
         });
     }
 
@@ -93,4 +93,5 @@ public class Bomb extends Collectables {
     public State getState() {
         return state;
     }
+
 }
