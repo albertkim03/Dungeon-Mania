@@ -65,6 +65,10 @@ public class BattleFacade {
         player.getBattleStatistics().setHealth(playerBattleStatistics.getHealth());
         enemy.getBattleStatistics().setHealth(enemyBattleStatistics.getHealth());
 
+        if (enemyBattleStatistics.getHealth() <= 0) {
+            player.addKillCount();
+        }
+
         // 4. call to decrease durability of items
         for (BattleItem item : battleItems) {
             if (item instanceof InventoryItem)

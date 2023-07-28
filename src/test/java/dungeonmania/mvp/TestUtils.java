@@ -1,6 +1,7 @@
 package dungeonmania.mvp;
 
 import dungeonmania.DungeonManiaController;
+import dungeonmania.entities.Player;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -255,6 +256,10 @@ public class TestUtils {
 
     static <T> boolean genericListsEqual(List<T> l1, List<T> l2) {
         return l1.containsAll(l2) && l2.containsAll(l1);
+    }
+
+    public static boolean areAllSpawnersDestroyed(DungeonResponse res) {
+        return getEntitiesStream(res, "spawner").count() == 0;
     }
 
 }

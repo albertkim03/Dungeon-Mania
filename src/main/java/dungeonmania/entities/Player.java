@@ -31,6 +31,7 @@ public class Player extends Entity implements Battleable {
     private int nextTrigger = 0;
 
     private int collectedTreasureCount = 0;
+    private int killCount = 0;
 
     private PlayerState state;
 
@@ -188,6 +189,14 @@ public class Player extends Entity implements Battleable {
             return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, false, false));
         }
         return origin;
+    }
+
+    public void addKillCount() {
+        killCount++;
+    }
+
+    public int getKillCount() {
+        return killCount;
     }
 
     // @Override
