@@ -25,7 +25,6 @@ public class BattleFacade {
         double initialEnemyHealth = enemy.getBattleStatistics().getHealth();
         String enemyString = NameConverter.toSnakeCase(enemy);
 
-
         // 1. apply buff provided by the game and player's inventory
         // getting buffing amount
         List<BattleItem> battleItems = new ArrayList<>();
@@ -36,7 +35,8 @@ public class BattleFacade {
             playerBuff = player.applyBuff(playerBuff);
         } else {
             for (BattleItem item : player.getInventory().getEntities(BattleItem.class)) {
-                if (item instanceof Potion) continue;
+                if (item instanceof Potion)
+                    continue;
                 playerBuff = item.applyBuff(playerBuff);
                 battleItems.add(item);
             }
@@ -44,7 +44,11 @@ public class BattleFacade {
 
         List<Mercenary> mercs = game.getMap().getEntities(Mercenary.class);
         for (Mercenary merc : mercs) {
-            if (!merc.isAllied()) continue;
+            // mind control 1 tick for duration
+            merc.mindControlTick();
+
+            if (!merc.isAllied())
+                continue;
             playerBuff = BattleStatistics.applyBuff(playerBuff, merc.getBattleStatistics());
         }
 
@@ -71,8 +75,8 @@ public class BattleFacade {
         battleResponses.add(new BattleResponse(
                 enemyString,
                 rounds.stream()
-                    .map(ResponseBuilder::getRoundResponse)
-                    .collect(Collectors.toList()),
+                        .map(ResponseBuilder::getRoundResponse)
+                        .collect(Collectors.toList()),
                 battleItems.stream()
                         .map(Entity.class::cast)
                         .map(ResponseBuilder::getItemResponse)
