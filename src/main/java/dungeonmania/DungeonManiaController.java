@@ -12,7 +12,7 @@ import dungeonmania.util.FileLoader;
 
 /**
  * DO NOT CHANGE METHOD SIGNITURES OF THIS FILE
- * */
+ */
 public class DungeonManiaController {
     private Game game = null;
 
@@ -57,6 +57,10 @@ public class DungeonManiaController {
         } catch (JSONException e) {
             return null;
         }
+    }
+
+    public int getKills() {
+        return game.getKillCount();
     }
 
     /**

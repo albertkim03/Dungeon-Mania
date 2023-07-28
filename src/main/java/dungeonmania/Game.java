@@ -11,6 +11,7 @@ import dungeonmania.entities.Interactable;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.potions.Potion;
+import dungeonmania.entities.enemies.ZombieToastSpawner;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.Goal;
@@ -196,11 +197,21 @@ public class Game {
         return player.getCollectedTreasureCount();
     }
 
+    public int getKillCount() {
+        return player.getKillCount();
+    }
+
     public Player getPlayer() {
         return player;
     }
 
     public BattleFacade getBattleFacade() {
         return battleFacade;
+    }
+
+    public boolean areAllSpawnersDestroyed() {
+        List<ZombieToastSpawner> zombieToastsSpawners = player.getInventory().getEntities(ZombieToastSpawner.class);
+
+        return zombieToastsSpawners.isEmpty();
     }
 }
