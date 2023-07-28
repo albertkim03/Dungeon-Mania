@@ -153,6 +153,22 @@ public class App implements SparkApplication {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.getDungeonResponseModel());
         }, gson::toJson);
 
+        Spark.post("/api/game/new/generate", "application/json", (request, response) -> {
+            // Extract parameters from request
+            int xStart = Integer.parseInt(request.queryParams("xStart"));
+            int yStart = Integer.parseInt(request.queryParams("yStart"));
+            int xEnd = Integer.parseInt(request.queryParams("xEnd"));
+            int yEnd = Integer.parseInt(request.queryParams("yEnd"));
+            String configName = request.queryParams("configName");
+            return callUsingSessionAndArgument(request, (dmc) -> {
+                try {
+                    return dmc.generateDungeon(xStart, yStart, xEnd, yEnd, configName);
+                } catch (IllegalArgumentException e) {
+                    throw new InvalidActionExceptionAPI(e.getMessage());
+                }
+            });
+        }, gson::toJson);
+
         Scintilla.start();
     }
 

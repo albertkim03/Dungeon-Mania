@@ -24,7 +24,7 @@ export function detectWebGL() {
           // WebGL is enabled.
           return true;
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // WebGL is supported, but disabled.
@@ -86,24 +86,24 @@ export const API = {
     evaluateAsset(
       axios.get(URL + "/skins/" + skin + ".json"),
       "Error GET /skins/" +
-        skin +
-        ".json: Is most likely due to the fact the file didn't exist, have a look at the Java output window",
+      skin +
+      ".json: Is most likely due to the fact the file didn't exist, have a look at the Java output window",
       {} as SkinFile
     ),
   loadLocalisation: (localisation: string): Promise<LocalisationFile> =>
     evaluateAsset(
       axios.get(URL + "/languages/" + localisation + ".json"),
       "Error GET /languages/" +
-        localisation +
-        ".json: Is most likely due to the fact the file didn't exist, have a look at the Java output window",
+      localisation +
+      ".json: Is most likely due to the fact the file didn't exist, have a look at the Java output window",
       {} as LocalisationFile
     ),
   getConfigs: (): Promise<string[]> =>
-      evaluateResponse(
-          axios.get(URL + "/api/configs/"),
-          "Error GET /configs: DungeonManiaController::configs(...)",
-          []
-      ),
+    evaluateResponse(
+      axios.get(URL + "/api/configs/"),
+      "Error GET /configs: DungeonManiaController::configs(...)",
+      []
+    ),
   getSkin: (): Promise<string> =>
     evaluateResponse(
       axios.get(URL + "/api/skin/current/"),
@@ -137,6 +137,24 @@ export const API = {
       "Error POST /game/new: DungeonManiaController::ctor(...)",
       null
     ),
+  generateDungeon: (xStart: integer, yStart: integer, xEnd: integer, yEnd: integer, configName: string): Promise<Dungeon | null> =>
+    evaluateResponse(
+      axios.post(
+        URL + "/api/game/new/generate",
+        {},
+        {
+          params: {
+            xStart,
+            yStart,
+            xEnd,
+            yEnd,
+            configName
+          },
+        }
+      ),
+      "Error POST /game/new/generate: DungeonManiaController::generateDungeon(...)",
+      null
+    ),
   interact: async (entityId: string): Promise<Dungeon | null> => {
     if (currentResponse) await currentResponse;
     return (currentResponse = evaluateResponse(
@@ -148,9 +166,9 @@ export const API = {
   dungeonResponseModel: async (): Promise<Dungeon | null> => {
     if (currentResponse) await currentResponse;
     return (currentResponse = evaluateResponse(
-        axios.post("/api/game/dungeonResponseModel/", {}),
-        "Error POST /games/game/dungeonResponseModel/: DungeonManiaController::dungeonResponseModel(...)",
-        null
+      axios.post("/api/game/dungeonResponseModel/", {}),
+      "Error POST /games/game/dungeonResponseModel/: DungeonManiaController::dungeonResponseModel(...)",
+      null
     ));
   },
   tickByItem: async (
@@ -172,21 +190,21 @@ export const API = {
     ));
   },
   tickByMovement: async (
-      movementDirection: "Up" | "Down" | "Left" | "Right" | "None"
+    movementDirection: "Up" | "Down" | "Left" | "Right" | "None"
   ): Promise<Dungeon | null> => {
     if (currentResponse) await currentResponse;
     return (currentResponse = evaluateResponse(
-        axios.post(
-            "/api/game/tick/movement/",
-            {},
-            {
-              params: {
-                movementDirection,
-              },
-            }
-        ),
-        "Error POST /game/tick: DungeonManiaController::tick(...)",
-        null
+      axios.post(
+        "/api/game/tick/movement/",
+        {},
+        {
+          params: {
+            movementDirection,
+          },
+        }
+      ),
+      "Error POST /game/tick: DungeonManiaController::tick(...)",
+      null
     ));
   },
   build: async (buildable: string): Promise<Dungeon | null> => {
@@ -208,17 +226,17 @@ export const API = {
   rewind: async (ticks: integer): Promise<Dungeon | null> => {
     if (currentResponse) await currentResponse;
     return currentResponse = evaluateResponse(
-        axios.post(
-            URL + "/api/game/rewind/",
-            {},
-            {
-              params: {
-                ticks,
-              },
-            }
-        ),
-        "Error POST /game/rewind: DungeonManiaController::rewindGame(...)",
-        null
+      axios.post(
+        URL + "/api/game/rewind/",
+        {},
+        {
+          params: {
+            ticks,
+          },
+        }
+      ),
+      "Error POST /game/rewind: DungeonManiaController::rewindGame(...)",
+      null
     );
   },
 };

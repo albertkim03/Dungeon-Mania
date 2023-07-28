@@ -3,8 +3,6 @@ package dungeonmania.entities.collectables;
 import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.BattleItem;
-import dungeonmania.entities.Entity;
-import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
 public class Sword extends Collectables implements BattleItem {
@@ -21,11 +19,6 @@ public class Sword extends Collectables implements BattleItem {
         super(position);
         this.attack = attack;
         this.durability = durability;
-    }
-
-    @Override
-    public boolean canMoveOnto(GameMap map, Entity entity) {
-        return true;
     }
 
     // @Override

@@ -1,12 +1,14 @@
 package dungeonmania.entities;
 
 import dungeonmania.Game;
+import dungeonmania.entities.Logic.LightBulb;
+import dungeonmania.entities.Logic.SwitchDoor;
+import dungeonmania.entities.Logic.Wire;
 import dungeonmania.entities.buildables.Bow;
 import dungeonmania.entities.buildables.MidnightArmour;
 import dungeonmania.entities.buildables.Shield;
 import dungeonmania.entities.buildables.Sceptre;
 import dungeonmania.entities.collectables.*;
-import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.enemies.*;
 import dungeonmania.map.GameMap;
 import dungeonmania.entities.collectables.potions.InvincibilityPotion;
@@ -138,55 +140,64 @@ public class EntityFactory {
         Position pos = new Position(jsonEntity.getInt("x"), jsonEntity.getInt("y"));
 
         switch (jsonEntity.getString("type")) {
-            case "player":
-                return buildPlayer(pos);
-            case "zombie_toast":
-                return buildZombieToast(pos);
-            case "zombie_toast_spawner":
-                return buildZombieToastSpawner(pos);
-            case "mercenary":
-                return buildMercenary(pos);
-            case "wall":
-                return new Wall(pos);
-            case "boulder":
-                return new Boulder(pos);
-            case "switch":
-                return new Switch(pos);
-            case "exit":
-                return new Exit(pos);
-            case "treasure":
-                return new Treasure(pos);
-            case "wood":
-                return new Wood(pos);
-            case "arrow":
-                return new Arrow(pos);
-            case "bomb":
-                int bombRadius = config.optInt("bomb_radius", Bomb.DEFAULT_RADIUS);
-                return new Bomb(pos, bombRadius);
-            case "invisibility_potion":
-                int invisibilityPotionDuration = config.optInt("invisibility_potion_duration",
-                        InvisibilityPotion.DEFAULT_DURATION);
-                return new InvisibilityPotion(pos, invisibilityPotionDuration);
-            case "invincibility_potion":
-                int invincibilityPotionDuration = config.optInt("invincibility_potion_duration",
-                        InvincibilityPotion.DEFAULT_DURATION);
-                return new InvincibilityPotion(pos, invincibilityPotionDuration);
-            case "portal":
-                return new Portal(pos, ColorCodedType.valueOf(jsonEntity.getString("colour")));
-            case "sword":
-                double swordAttack = config.optDouble("sword_attack", Sword.DEFAULT_ATTACK);
-                int swordDurability = config.optInt("sword_durability", Sword.DEFAULT_DURABILITY);
-                return new Sword(pos, swordAttack, swordDurability);
-            case "spider":
-                return buildSpider(pos);
-            case "door":
-                return new Door(pos, jsonEntity.getInt("key"));
-            case "key":
-                return new Key(pos, jsonEntity.getInt("key"));
-            case "sun_stone":
-                return new SunStone(pos, jsonEntity.getInt("key"));
-            default:
-                return null;
+        case "player":
+            return buildPlayer(pos);
+        case "zombie_toast":
+            return buildZombieToast(pos);
+        case "zombie_toast_spawner":
+            return buildZombieToastSpawner(pos);
+        case "mercenary":
+            return buildMercenary(pos);
+        case "wall":
+            return new Wall(pos);
+        case "boulder":
+            return new Boulder(pos);
+        case "switch":
+            return new Switch(pos);
+        case "exit":
+            return new Exit(pos);
+        case "treasure":
+            return new Treasure(pos);
+        case "wood":
+            return new Wood(pos);
+        case "arrow":
+            return new Arrow(pos);
+        case "bomb":
+            int bombRadius = config.optInt("bomb_radius", Bomb.DEFAULT_RADIUS);
+            if (!config.has("logical_rule")) {
+                return new Bomb(pos, bombRadius, "or");
+            }
+            return new Bomb(pos, bombRadius, config.getString("logical_rule"));
+        case "invisibility_potion":
+            int invisibilityPotionDuration = config.optInt("invisibility_potion_duration",
+                    InvisibilityPotion.DEFAULT_DURATION);
+            return new InvisibilityPotion(pos, invisibilityPotionDuration);
+        case "invincibility_potion":
+            int invincibilityPotionDuration = config.optInt("invincibility_potion_duration",
+                    InvincibilityPotion.DEFAULT_DURATION);
+            return new InvincibilityPotion(pos, invincibilityPotionDuration);
+        case "portal":
+            return new Portal(pos, ColorCodedType.valueOf(jsonEntity.getString("colour")));
+        case "sword":
+            double swordAttack = config.optDouble("sword_attack", Sword.DEFAULT_ATTACK);
+            int swordDurability = config.optInt("sword_durability", Sword.DEFAULT_DURABILITY);
+            return new Sword(pos, swordAttack, swordDurability);
+        case "spider":
+            return buildSpider(pos);
+        case "door":
+            return new Door(pos, jsonEntity.getInt("key"));
+        case "key":
+            return new Key(pos, jsonEntity.getInt("key"));
+            case "light_bulb_off":
+            return new LightBulb(pos, config.getString("logical_rule"));
+        case "wire":
+            return new Wire(pos);
+        case "switch_door":
+            return new SwitchDoor(pos, config.getString("logical_rule"));
+        case "sun_stone":
+            return new SunStone(pos, jsonEntity.getInt("key"));
+        default:
+            return null;
         }
     }
 }

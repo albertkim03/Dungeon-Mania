@@ -108,7 +108,17 @@ public class DungeonManiaController {
      */
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName)
             throws IllegalArgumentException {
-        return null;
+        // Checks if configName exist
+        if (!configs().contains(configName)) {
+            throw new IllegalArgumentException(configName + " is not a configuration that exists");
+        }
+
+        boolean[][] maze = DungeonGenerationBuilder.createRandomDungeon(xStart, xEnd, yStart, yEnd);
+        DungeonGenerationBuilder.dungeonToJSON(maze, xStart, yStart, xEnd, yEnd);
+        // Modify Game game with the appropriate map maze
+        GameBuilder builder = new GameBuilder().setConfigName(configName).setDungeonName("dungeon_generation");
+        game = builder.buildGame();
+        return ResponseBuilder.getDungeonResponse(game);
     }
 
     /**
