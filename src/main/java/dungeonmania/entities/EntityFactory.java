@@ -183,7 +183,7 @@ public class EntityFactory {
                 return new Door(pos, jsonEntity.getInt("key"));
             case "key":
                 return new Key(pos, jsonEntity.getInt("key"));
-            case "sunstone":
+            case "sun_stone":
                 return new SunStone(pos, jsonEntity.getInt("key"));
             default:
                 return null;

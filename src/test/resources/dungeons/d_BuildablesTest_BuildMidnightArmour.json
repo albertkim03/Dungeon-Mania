@@ -6,12 +6,12 @@
             "y": 1
         },
         {
-            "type": "wood",
+            "type": "sword",
             "x": 2,
             "y": 2
         },
         {
-            "type": "key",
+            "type": "sun_stone",
             "x": 2,
             "y": 3,
             "key": 1
