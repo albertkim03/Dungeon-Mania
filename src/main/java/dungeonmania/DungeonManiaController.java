@@ -5,18 +5,11 @@ import java.util.List;
 import org.json.JSONException;
 
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.map.GameMap;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.ResponseBuilder;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
-import dungeonmania.util.Position;
 
-import dungeonmania.entities.Entity;
-import dungeonmania.entities.EntityFactory;
-import dungeonmania.entities.Exit;
-import dungeonmania.entities.Player;
-import dungeonmania.entities.Wall;
 /**
  * DO NOT CHANGE METHOD SIGNITURES OF THIS FILE
  * */
@@ -111,46 +104,16 @@ public class DungeonManiaController {
      */
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName)
             throws IllegalArgumentException {
-                //  NOTE NEED TO BE SET CONFIG AND BUILD THE GAEME
         // Checks if configName exist
         if (!configs().contains(configName)) {
             throw new IllegalArgumentException(configName + " is not a configuration that exists");
         }
-        // Set the newly created Prims algo maze to entities required
-        // to create the game map, then build it and return it
-        int height = Math.abs(yEnd - yStart) + 3;
-        int width = Math.abs(xEnd - xStart) + 3;
-        Position start = new Position(xStart, yStart);
-        Position end = new Position(xEnd, yEnd);
-        boolean[][] maze = DungeonGenerationBuilder.createRandomDungeon(width, height, start, end);
+
+        boolean[][] maze = DungeonGenerationBuilder.createRandomDungeon(xStart, xEnd, yStart, yEnd);
+        DungeonGenerationBuilder.dungeonToJSON(maze, xStart, yStart, xEnd, yEnd);
         // Modify Game game with the appropriate map maze
-        GameMap map = new GameMap();
-        game = new Game("dungeon_generation");
-        EntityFactory entityFactory = game.getEntityFactory();
-        // ADD ENTITIES (Wall, Player, Exit)
-        // Add Player and Exit
-        map.setPlayer((Player) entityFactory.buildPlayer(start));
-        map.addEntity(new Exit(end));
-        // Add (outer) Walls
-        for (int x = xStart - 1; x <= xEnd + 1; x++) {
-            map.addEntity(createWallEntityDungeonGeneration(x, yStart + 1));
-            map.addEntity(createWallEntityDungeonGeneration(x, yEnd - 1));
-        }
-        for (int y = yStart; y >= yEnd; y--) {
-            map.addEntity(createWallEntityDungeonGeneration(xStart - 1, y));
-            map.addEntity(createWallEntityDungeonGeneration(xEnd + 1, y));
-        }
-        // Add (inner) Walls
-        for (int x = xStart; x <= xEnd; x++) {
-            for (int y = yStart; y >= yEnd; y--) {
-               if (!maze[y][x]) {
-                // If its a wall
-                map.addEntity(createWallEntityDungeonGeneration(x, y));
-               }
-            }
-        }
-        // UPDATE MAP TO GAME
-        game.setMap(map);
+        GameBuilder builder = new GameBuilder().setConfigName(configName).setDungeonName("dungeon_generation");
+        game = builder.buildGame();
         return ResponseBuilder.getDungeonResponse(game);
     }
 
@@ -161,7 +124,4 @@ public class DungeonManiaController {
         return null;
     }
 
-    private Entity createWallEntityDungeonGeneration(int x, int y) {
-        return new Wall(new Position(x, y));
-    }
 }
