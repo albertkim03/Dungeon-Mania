@@ -8,6 +8,7 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.potions.InvincibilityPotion;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
@@ -49,6 +50,10 @@ public class Player extends Entity implements Battleable {
         return inventory.hasWeapon();
     }
 
+    public boolean hasSceptre() {
+        return inventory.hasSceptre();
+    }
+
     public BattleItem getWeapon() {
         return inventory.getWeapon();
     }
@@ -58,7 +63,19 @@ public class Player extends Entity implements Battleable {
     }
 
     public boolean build(String entity, EntityFactory factory) {
-        InventoryItem item = inventory.checkBuildCriteria(this, true, entity.equals("shield"), factory);
+        int buildIndex = 0;
+
+        if (entity.equals("bow")) {
+            buildIndex = 0;
+        } else if (entity.equals("shield")) {
+            buildIndex = 1;
+        } else if (entity.equals("midnight_armour")) {
+            buildIndex = 2;
+        } else if (entity.equals("sceptre")) {
+            buildIndex = 3;
+        }
+
+        InventoryItem item = inventory.checkBuildCriteria(this, true, buildIndex, factory);
         if (item == null)
             return false;
         return inventory.add(item);
@@ -92,6 +109,10 @@ public class Player extends Entity implements Battleable {
     public boolean pickUp(Entity item) {
         if (item instanceof Treasure)
             collectedTreasureCount++;
+
+        if (item instanceof SunStone)
+            collectedTreasureCount++;
+
         return inventory.add((InventoryItem) item);
     }
 
