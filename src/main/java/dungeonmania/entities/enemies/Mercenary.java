@@ -53,7 +53,7 @@ public class Mercenary extends Enemy implements Interactable {
 
     /**
      * check whether the current merc can be bribed
-     * 
+     *
      * @param player
      * @return
      */
