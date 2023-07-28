@@ -11,31 +11,35 @@ public class GraphNodeFactory {
 
     private static GraphNode constructEntity(JSONObject jsonEntity, EntityFactory factory) {
         switch (jsonEntity.getString("type")) {
-            case "player":
-            case "zombie_toast":
-            case "zombie_toast_spawner":
-            case "mercenary":
-            case "wall":
-            case "boulder":
-            case "switch":
-            case "exit":
-            case "treasure":
-            case "wood":
-            case "arrow":
-            case "bomb":
-            case "invisibility_potion":
-            case "invincibility_potion":
-            case "portal":
-            case "sword":
-            case "spider":
-            case "door":
-            case "key":
-            case "sun_stone":
-            case "sceptre":
-            case "midnight_armour":
-                return new GraphNode(factory.createEntity(jsonEntity));
-            default:
-                return null;
+        case "player":
+        case "zombie_toast":
+        case "zombie_toast_spawner":
+        case "mercenary":
+        case "wall":
+        case "boulder":
+        case "switch":
+        case "exit":
+        case "treasure":
+        case "wood":
+        case "arrow":
+        case "bomb":
+        case "invisibility_potion":
+        case "invincibility_potion":
+        case "portal":
+        case "sword":
+        case "spider":
+        case "door":
+        case "key":
+        case "switch_door":
+        case "light_bulb_off":
+        case "light_bulb_on":
+        case "wire":
+        case "sun_stone":
+        case "sceptre":
+        case "midnight_armour":
+            return new GraphNode(factory.createEntity(jsonEntity));
+        default:
+            return null;
         }
     }
 }

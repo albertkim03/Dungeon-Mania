@@ -11,7 +11,8 @@ import dungeonmania.Game;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Portal;
-import dungeonmania.entities.Switch;
+import dungeonmania.entities.Logic.Conductor;
+import dungeonmania.entities.Logic.Logic;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.ZombieToastSpawner;
@@ -35,17 +36,32 @@ public class GameMap {
         initPairPortals();
         initRegisterMovables();
         initRegisterSpawners();
-        initRegisterBombsAndSwitches();
+        initRegisterBombsAndConductors();
+        initRegisterLogics();
     }
 
-    private void initRegisterBombsAndSwitches() {
+    private void initRegisterBombsAndConductors() {
         List<Bomb> bombs = getEntities(Bomb.class);
-        List<Switch> switchs = getEntities(Switch.class);
+        List<Conductor> conductors = getEntities(Conductor.class);
         for (Bomb b : bombs) {
-            for (Switch s : switchs) {
-                if (Position.isAdjacent(b.getPosition(), s.getPosition())) {
-                    b.subscribe(s);
-                    s.subscribe(b);
+            for (Conductor c : conductors) {
+                if (Position.isAdjacent(b.getPosition(), c.getPosition())) {
+                    b.subscribe(c);
+                    c.subscribe(b);
+                }
+            }
+        }
+    }
+
+    private void initRegisterLogics() {
+        List<Logic> logics = getEntities(Logic.class);
+        for (int i = 0; i < logics.size(); i++) {
+            Logic l1 = logics.get(i);
+            for (int j = i + 1; j < logics.size(); j++) {
+                Logic l2 = logics.get(j);
+                if (Position.isAdjacent(l1.getPosition(), l2.getPosition())) {
+                    l1.subscribe(l2);
+                    l2.subscribe(l1);
                 }
             }
         }
