@@ -66,8 +66,7 @@ public class Inventory {
                 falseKeys++;
             } else if (keys >= 1 && treasure == 0) {
                 falseTreasure++;
-            } else if (keys == 0 && treasure == 0) {
-                falseTreasure++;
+            } else if (keys == 0 && treasure == 1) {
             }
         }
         // sceptre creation
@@ -108,7 +107,7 @@ public class Inventory {
         List<ZombieToast> zombieToasts = getEntities(ZombieToast.class);
 
         // build bow
-        if (buildIndex == 0 && getBuildables().contains("bow")) {
+        if (buildIndex == 0 && getBuildables().contains("bow") && wood.size() >= 1 && arrows.size() >= 3) {
             if (remove) {
                 // (1 wood)
                 items.remove(wood.get(0));
@@ -122,7 +121,8 @@ public class Inventory {
         }
 
         // build shield
-        if (buildIndex == 1 && getBuildables().contains("shield")) {
+        if (buildIndex == 1 && getBuildables().contains("shield") && wood.size() >= 2
+                && (treasure.size() >= 1 || keys.size() >= 1 || sunStones.size() >= 1)) {
             if (remove) {
                 // (2 wood)
                 items.remove(wood.get(0));
@@ -140,7 +140,9 @@ public class Inventory {
         }
 
         // build midnight_armour
-        if (buildIndex == 2 && getBuildables().contains("midnight_armour") && zombieToasts.isEmpty()) {
+        if (buildIndex == 2 && getBuildables().contains("midnight_armour") && zombieToasts.isEmpty()
+                && swords.size() >= 1
+                && sunStones.size() >= 1) {
             if (remove) {
                 // (1 sword)
                 items.remove(swords.get(0));
@@ -153,7 +155,9 @@ public class Inventory {
         }
 
         // build sceptre
-        if (buildIndex == 3 && getBuildables().contains("sceptre")) {
+        if (buildIndex == 3 && getBuildables().contains("sceptre") && (wood.size() >= 1 || arrows.size() >= 2)
+                && (keys.size() >= 1 || treasure.size() >= 1)
+                && (sunStones.size() >= 1)) {
             if (remove) {
                 // (1 wood OR 2 arrows)
                 if (wood.size() >= 1) {
