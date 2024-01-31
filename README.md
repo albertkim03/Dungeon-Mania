@@ -1,2 +1,7 @@
-You can view the assignment specification here:
-https://unswcse.atlassian.net/wiki/spaces/cs251123t1/pages/83165185/Assignment+II+Dungeonmania
+You can run 'Dungeon Mania' on your web browser.
+
+1) Open the repo on an IDE
+2) Find App.java in src/main/java/App.java
+3) Click run 
+
+   
